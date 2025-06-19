@@ -1,0 +1,38 @@
+name: Workflow Scan
+
+on:
+  workflow_dispatch:
+#  pull_request:
+#    paths:
+#      - '.github/workflows/*'
+#  push:
+#    paths:
+#      - '.github/workflows/*'
+
+permissions: # https://docs.github.com/en/actions/using-jobs/assigning-permissions-to-jobs
+  contents: read
+
+
+jobs:
+
+  workflow-scans:
+    name: Workflow Scans
+    runs-on: ubuntu-latest
+
+    steps:
+
+      - name: Checkout Sources
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: 3.13.5
+
+      - name: Install zizmor
+        run: pip install zizmor
+
+      - name: Run zizmor on workflows
+        run: zizmor --offline .
